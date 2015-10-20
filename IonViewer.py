@@ -222,7 +222,7 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         self.click_cid = None
         self.im = None
         self.init_mouse_click()
-        self.first_time_draw = True
+        self.cbar = None
         self.show_j_at_mpl_down = 0
         self.mpl_up_vline = None
 
@@ -363,7 +363,7 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
                                  self.dv_r[0])*self.display_data.shape[1])
                     ion_p = self.display_data[data_i, data_j]
                     self.state_bar.showMessage(" cv %d pv %d ion: %f" %
-                                               (data_i, data_j, ion_p))
+                                               (cv_p, dv_p, ion_p))
                 else:
                     self.state_bar.clearMessage()
         self.click_cid = self.mplwidget_up.figure.canvas.mpl_connect(
@@ -415,12 +415,10 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         self.mpl_up_vline = axes.axvline(x=self.show_j_at_mpl_down, c='r')
         axes.set_xlabel('DV')
         axes.set_ylabel('CV')
-        if self.first_time_draw:
-            self.cbar = self.mplwidget_up.figure.colorbar(self.im)
-            self.first_time_draw = False
-        else:
-            self.im.autoscale()
-            self.cbar.update_bruteforce(self.im)
+        if self.cbar is not None:
+            self.cbar.remove()
+        self.cbar = self.mplwidget_up.figure.colorbar(self.im)
+        self.im.autoscale()
         self.mplwidget_up.figure.canvas.updateGeometry()
 #        self.mpl_up_vline = axes.axvline(x=20, c='r')
 #        self.mplwidget_up.show()
