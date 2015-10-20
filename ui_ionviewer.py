@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'IonViewer.ui'
 #
-# Created: Mon Oct 19 15:33:32 2015
+# Created: Tue Oct 20 11:18:38 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -69,6 +69,8 @@ class Ui_MainWindow(object):
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
         self.menuSetting = QtGui.QMenu(self.menubar)
         self.menuSetting.setObjectName(_fromUtf8("menuSetting"))
+        self.menuDisplay_Enhance = QtGui.QMenu(self.menuSetting)
+        self.menuDisplay_Enhance.setObjectName(_fromUtf8("menuDisplay_Enhance"))
         self.menuCopy = QtGui.QMenu(self.menubar)
         self.menuCopy.setObjectName(_fromUtf8("menuCopy"))
         MainWindow.setMenuBar(self.menubar)
@@ -92,10 +94,15 @@ class Ui_MainWindow(object):
         self.actionCopy_Image.setObjectName(_fromUtf8("actionCopy_Image"))
         self.actionCopy_Slice = QtGui.QAction(MainWindow)
         self.actionCopy_Slice.setObjectName(_fromUtf8("actionCopy_Slice"))
+        self.actionHistrogram_Equlaization = QtGui.QAction(MainWindow)
+        self.actionHistrogram_Equlaization.setCheckable(True)
+        self.actionHistrogram_Equlaization.setObjectName(_fromUtf8("actionHistrogram_Equlaization"))
         self.menuFile.addAction(self.actionLoad_File)
         self.menuFile.addAction(self.actionLoad_Folder)
         self.menuFile.addAction(self.actionClean_Load_File)
+        self.menuDisplay_Enhance.addAction(self.actionHistrogram_Equlaization)
         self.menuSetting.addAction(self.actionColorMapSettingDialog)
+        self.menuSetting.addAction(self.menuDisplay_Enhance.menuAction())
         self.menuCopy.addAction(self.actionCopy_Image)
         self.menuCopy.addAction(self.actionCopy_Slice)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -109,6 +116,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Ion Viewer", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuSetting.setTitle(_translate("MainWindow", "Setting", None))
+        self.menuDisplay_Enhance.setTitle(_translate("MainWindow", "Display Enhance", None))
         self.menuCopy.setTitle(_translate("MainWindow", "Copy", None))
         self.actionLoad_File.setText(_translate("MainWindow", "Load File", None))
         self.actionLoad_Folder.setText(_translate("MainWindow", "Load Folder", None))
@@ -118,5 +126,6 @@ class Ui_MainWindow(object):
         self.actionNormalize_by_DV.setText(_translate("MainWindow", "Normalize by DV", None))
         self.actionCopy_Image.setText(_translate("MainWindow", "Copy Image", None))
         self.actionCopy_Slice.setText(_translate("MainWindow", "Copy Slice", None))
+        self.actionHistrogram_Equlaization.setText(_translate("MainWindow", "Histrogram Equlaization", None))
 
 from matplotlibwidget import MatplotlibWidget

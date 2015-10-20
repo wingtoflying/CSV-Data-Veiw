@@ -81,7 +81,14 @@
     <property name="title">
      <string>Setting</string>
     </property>
+    <widget class="QMenu" name="menuDisplay_Enhance">
+     <property name="title">
+      <string>Display Enhance</string>
+     </property>
+     <addaction name="actionHistrogram_Equlaization"/>
+    </widget>
     <addaction name="actionColorMapSettingDialog"/>
+    <addaction name="menuDisplay_Enhance"/>
    </widget>
    <widget class="QMenu" name="menuCopy">
     <property name="title">
@@ -137,6 +144,14 @@
   <action name="actionCopy_Slice">
    <property name="text">
     <string>Copy Slice</string>
+   </property>
+  </action>
+  <action name="actionHistrogram_Equlaization">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Histrogram Equlaization</string>
    </property>
   </action>
  </widget>

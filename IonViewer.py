@@ -8,6 +8,7 @@ from ui_ionviewer import Ui_MainWindow
 from ui_cmsettingdialog import Ui_DialogColorMapSetting
 from ui_changedatadisplaydialog import Ui_DialogChangeDataRange
 import numpy as np
+import skimage.exposure
 
 
 class DataRangeShowSettingDialog(QtGui.QDialog, Ui_DialogChangeDataRange):
@@ -213,6 +214,8 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
             self.action_show_cm_setting_dialog)
         self.actionClean_Load_File.triggered.connect(
             self.clean_loaded_file_list)
+        load_setting = dict()
+        self.visual_enhance = dict()
         self.displayDV = 0
         self.display_data = None
         self.click_cid = None
@@ -231,14 +234,18 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         self.qsettings.setFallbacksEnabled(False)
         self.read_file_path = self.qsettings.value('filePath', '\home',
                                                    type=unicode)
-        load_setting = dict()
         load_setting['gamma'] = self.qsettings.value('Gamma', 1, type=float)
         qsetting_cm_type_name = self.qsettings.value('cm_type', 'jet',
                                                      type=unicode)
         qsetting_cm_type = [n for n in CMType if n.name ==
                             qsetting_cm_type_name][0]
         load_setting['cm_type'] = qsetting_cm_type
-
+        self.visual_enhance['HE'] = self.qsettings.value('Enhance_HE', False,
+                                                         type=bool)
+        self.actionHistrogram_Equlaization.setChecked(
+            self.visual_enhance['HE'])
+        self.actionHistrogram_Equlaization.triggered.connect(
+            self.actionHistrogram_Equlaization_change)
         # set cm
         self.cm = matplotlib.cm.get_cmap(load_setting['cm_type'].name)
         self.cm.set_gamma(load_setting['gamma'])
@@ -279,6 +286,11 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         else:
             event.setDropAction(QtCore.Qt.MoveAction)
             super(IonViewer, self).dropEvent(event)
+
+    def actionHistrogram_Equlaization_change(self, e):
+        self.visual_enhance['HE'] =\
+            self.actionHistrogram_Equlaization.isChecked()
+        self.selected_change() #  force redraw
 
     def loadfile(self, filename):
         print "Enter Load File Function  "
@@ -372,6 +384,13 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         self.mpl_up_vline.set_xdata(self.show_j_at_mpl_down)
         self.mplwidget_up.figure.canvas.draw()
 
+    def enhance_before_show(self, data):
+        if self.visual_enhance['HE']:
+            data = data/data.max()
+            data_eq = skimage.exposure.equalize_hist(data)
+            return data_eq
+        return data
+
     def show_img_up(self, item):
         self.mplwidget_up.axes.cla()
         r_i = item.data_show_range[:2]
@@ -382,7 +401,8 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         self.display_dv = item.cv[r_j[0]:r_j[1]]
         self.cv_r = item.cv[r_i[0]], item.cv[r_i[1] - 1]
         self.dv_r = item.dv[r_j[0]], item.dv[r_j[1] - 1]
-        self.im = self.mplwidget_up.axes.imshow(self.display_data,
+        refine_data = self.enhance_before_show(self.display_data)
+        self.im = self.mplwidget_up.axes.imshow(refine_data,
                                                 interpolation='none',
                                                 extent=list(self.dv_r +
                                                             self.cv_r),
