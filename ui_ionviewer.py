@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'IonViewer.ui'
 #
-# Created: Tue Oct 20 11:18:38 2015
+# Created: Tue Oct 20 11:33:42 2015
 #      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -94,13 +94,13 @@ class Ui_MainWindow(object):
         self.actionCopy_Image.setObjectName(_fromUtf8("actionCopy_Image"))
         self.actionCopy_Slice = QtGui.QAction(MainWindow)
         self.actionCopy_Slice.setObjectName(_fromUtf8("actionCopy_Slice"))
-        self.actionHistrogram_Equlaization = QtGui.QAction(MainWindow)
-        self.actionHistrogram_Equlaization.setCheckable(True)
-        self.actionHistrogram_Equlaization.setObjectName(_fromUtf8("actionHistrogram_Equlaization"))
+        self.actionHistogram_Equlaization = QtGui.QAction(MainWindow)
+        self.actionHistogram_Equlaization.setCheckable(True)
+        self.actionHistogram_Equlaization.setObjectName(_fromUtf8("actionHistogram_Equlaization"))
         self.menuFile.addAction(self.actionLoad_File)
         self.menuFile.addAction(self.actionLoad_Folder)
         self.menuFile.addAction(self.actionClean_Load_File)
-        self.menuDisplay_Enhance.addAction(self.actionHistrogram_Equlaization)
+        self.menuDisplay_Enhance.addAction(self.actionHistogram_Equlaization)
         self.menuSetting.addAction(self.actionColorMapSettingDialog)
         self.menuSetting.addAction(self.menuDisplay_Enhance.menuAction())
         self.menuCopy.addAction(self.actionCopy_Image)
@@ -126,6 +126,6 @@ class Ui_MainWindow(object):
         self.actionNormalize_by_DV.setText(_translate("MainWindow", "Normalize by DV", None))
         self.actionCopy_Image.setText(_translate("MainWindow", "Copy Image", None))
         self.actionCopy_Slice.setText(_translate("MainWindow", "Copy Slice", None))
-        self.actionHistrogram_Equlaization.setText(_translate("MainWindow", "Histrogram Equlaization", None))
+        self.actionHistogram_Equlaization.setText(_translate("MainWindow", "Histogram Equlaization", None))
 
 from matplotlibwidget import MatplotlibWidget

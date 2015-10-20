@@ -82,7 +82,7 @@ class IonItem(QtGui.QWidget):
     def __init__(self, filename, parent=None):
         # super(IonItem, self).__init__(parent)
         super(QtGui.QWidget, self).__init__(parent)
-        self.loadcsv(filename)
+        self.loadcsv(str(filename))
         qdir = QtCore.QDir(filename)
         if qdir.isRelative():
             self.display_name = filename
@@ -101,6 +101,7 @@ class IonItem(QtGui.QWidget):
 
     def loadcsv(self, filename):
         #  load data and set initial range to maximun data size
+        filename = str(filename)
         rough = np.genfromtxt(filename, delimiter=',')
         self.cv = rough[1:, 0]
         self.dv = rough[0, 1:]
@@ -242,10 +243,10 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         load_setting['cm_type'] = qsetting_cm_type
         self.visual_enhance['HE'] = self.qsettings.value('Enhance_HE', False,
                                                          type=bool)
-        self.actionHistrogram_Equlaization.setChecked(
+        self.actionHistogram_Equlaization.setChecked(
             self.visual_enhance['HE'])
-        self.actionHistrogram_Equlaization.triggered.connect(
-            self.actionHistrogram_Equlaization_change)
+        self.actionHistogram_Equlaization.triggered.connect(
+            self.actionHistogram_Equlaization_change)
         # set cm
         self.cm = matplotlib.cm.get_cmap(load_setting['cm_type'].name)
         self.cm.set_gamma(load_setting['gamma'])
@@ -260,6 +261,7 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         self.qsettings.setValue('filePath', self.read_file_path)
         self.qsettings.setValue('Gamma', self.cm_dialog.gamma)
         self.qsettings.setValue('cm_type', self.cm_dialog.cmtype.name)
+        self.qsettings.setValue('Enhance_HE', self.visual_enhance['HE'])
         e.accept()
 
     def dragEnterEvent(self, event):
@@ -287,10 +289,10 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
             event.setDropAction(QtCore.Qt.MoveAction)
             super(IonViewer, self).dropEvent(event)
 
-    def actionHistrogram_Equlaization_change(self, e):
+    def actionHistogram_Equlaization_change(self, e):
         self.visual_enhance['HE'] =\
-            self.actionHistrogram_Equlaization.isChecked()
-        self.selected_change() #  force redraw
+            self.actionHistogram_Equlaization.isChecked()
+        self.selected_change()  # force redraw
 
     def loadfile(self, filename):
         print "Enter Load File Function  "
@@ -306,7 +308,6 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
 
     def selected_change(self):
         print 'Select change'
-        print self.last_select_item
         if self.last_select_item is not None:
             print "Disconnect change range signal from old item"
             print type(self.last_select_item)
@@ -415,10 +416,11 @@ class IonViewer(QtGui.QMainWindow, Ui_MainWindow):
         axes.set_xlabel('DV')
         axes.set_ylabel('CV')
         if self.first_time_draw:
-            self.mplwidget_up.figure.colorbar(self.im)
+            self.cbar = self.mplwidget_up.figure.colorbar(self.im)
             self.first_time_draw = False
         else:
             self.im.autoscale()
+            self.cbar.update_bruteforce(self.im)
         self.mplwidget_up.figure.canvas.updateGeometry()
 #        self.mpl_up_vline = axes.axvline(x=20, c='r')
 #        self.mplwidget_up.show()
